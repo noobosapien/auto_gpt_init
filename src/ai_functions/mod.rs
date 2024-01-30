@@ -1,3 +1,3 @@
 pub mod aifunc_architecture;
 pub mod aifunc_backend;
-pub mod aifunc_manging;
+pub mod aifunc_managing;

@@ -85,7 +85,7 @@ pub fn save_api_endpoints(api_endpoints: &String) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ai_functions::aifunc_manging::convert_user_input_to_goal;
+    use crate::ai_functions::aifunc_managing::convert_user_input_to_goal;
 
     #[test]
     fn tests_extending_function() {
