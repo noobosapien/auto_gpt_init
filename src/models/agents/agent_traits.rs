@@ -27,3 +27,12 @@ pub struct FactSheet {
     pub backend_code: Option<String>,
     pub api_endpoint_schema: Option<RouteObject>,
 }
+
+#[async_trait]
+pub trait SpecialFunctions: Debug {
+    fn get_attributes_from_agent(&self) -> &BasicAgent;
+    async fn execute(
+        &mut self,
+        factsheet: &mut FactSheet,
+    ) -> Result<(), Box<dyn std::error::Error>>;
+}
