@@ -72,6 +72,11 @@ pub fn read_code_template_contents() -> String {
     fs::read_to_string(path).expect("Couldn't read the file.")
 }
 
+pub fn read_executable_main_contents() -> String {
+    let path: String = EXEC_MAIN_PATH.to_string();
+    fs::read_to_string(path).expect("Couldn't read the file.")
+}
+
 pub fn save_backend_code(contents: &String) {
     let path: String = EXEC_MAIN_PATH.to_string();
     fs::write(path, contents).expect("Couldn't write to file.");

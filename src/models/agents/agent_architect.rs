@@ -89,12 +89,80 @@ impl SpecialFunctions for AgentSolutionArchitect {
                         self.attributes.state = AgentState::UnitTesting;
                     }
                 }
-                AgentState::UnitTesting => {}
+                AgentState::UnitTesting => {
+                    let mut exclude_urls: Vec<String> = vec![];
+                    let client: Client = Client::builder().build().unwrap();
+
+                    let urls: &Vec<String> = factsheet
+                        .external_urls
+                        .as_ref()
+                        .expect("No URL object on fact sheet");
+
+                    for url in urls {
+                        let endpoint_str: String = format!("Testing URL Endpoints: {}", url);
+                        PrintCommand::UnitTest.print_agent_msg(
+                            self.attributes.position.as_str(),
+                            endpoint_str.as_str(),
+                        );
+
+                        match check_status_code(&client, url).await {
+                            Ok(status_code) => {
+                                if status_code != 200 {
+                                    exclude_urls.push(url.clone());
+                                }
+                            }
+
+                            Err(e) => println!("{} - {}", url, e),
+                        }
+                    }
+
+                    if exclude_urls.len() > 0 {
+                        let new_urls: Vec<String> = factsheet
+                            .external_urls
+                            .as_ref()
+                            .unwrap()
+                            .iter()
+                            .filter(|url| !exclude_urls.contains(&url))
+                            .cloned()
+                            .collect();
+
+                        factsheet.external_urls = Some(new_urls);
+                    }
+
+                    self.attributes.state = AgentState::Finishing;
+                }
                 _ => {
                     self.attributes.state = AgentState::Finishing;
                 }
             }
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn tests_solution_architect() {
+        let mut agent: AgentSolutionArchitect = AgentSolutionArchitect::new();
+
+        let mut factsheet: FactSheet = FactSheet{
+            project_description: "Build a full stack website with user login and logout that shows latest forex prices".to_string(),
+            project_scope: None,
+            external_urls: None,
+            backend_code: None,
+            api_endpoint_schema: None
+        };
+
+        agent
+            .execute(&mut factsheet)
+            .await
+            .expect("Unable to execute solution arachitect agent.");
+
+        assert!(factsheet.project_scope != None);
+        assert!(factsheet.external_urls.is_some());
+        dbg!(factsheet);
     }
 }
