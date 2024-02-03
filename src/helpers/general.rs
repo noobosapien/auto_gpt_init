@@ -4,9 +4,11 @@ use reqwest::Client;
 use serde::de::DeserializeOwned;
 use std::fs;
 
-const CODE_TEMPlATE_PATH: &str = "/home/migara/Desktop/projects/actix_template/src/template.rs";
-const EXEC_MAIN_PATH: &str = "/home/migara/Desktop/projects/actix_template/src/main.rs";
-const API_SCHEMA_PATH: &str = "/home/migara/Desktop/projects/auto_gpt_init/schemas/api_schema.json";
+pub const CODE_TEMPlATE_PATH: &str = "/home/migara/Desktop/projects/actix_template/src/template.rs";
+pub const EXEC_MAIN_PATH: &str = "/home/migara/Desktop/projects/actix_template/src/main.rs";
+pub const API_SCHEMA_PATH: &str =
+    "/home/migara/Desktop/projects/auto_gpt_init/schemas/api_schema.json";
+pub const WEB_SERVER_PROJECT_PATH: &str = "/home/migara/Desktop/projects/actix_template/";
 
 pub fn extend_ai_function(ai_func: fn(&str) -> &'static str, func_input: &str) -> Message {
     let ai_function_str = ai_func(func_input);

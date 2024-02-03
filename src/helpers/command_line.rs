@@ -72,13 +72,14 @@ pub fn confirm_safe_code() -> bool {
         stdin()
             .read_line(&mut human_response)
             .expect("Failed to read response");
-        human_response.trim().to_lowercase();
+
+        let human_response: String = human_response.trim().to_lowercase();
 
         match human_response.as_str() {
             "1" | "ok" => return true,
             "2" | "stop" => return false,
             _ => {
-                println!("Invalid input please select 1 or 2.");
+                println!("Invalid input please select 1 or 2.")
             }
         }
     }
